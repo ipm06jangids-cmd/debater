@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { BgVideo } from "./BgVideo";
 
 const SAMPLE = [
   { role: "user" as const, text: "Social media has done more harm than good for democracy.", score: 64 },
@@ -11,11 +12,21 @@ const SAMPLE = [
 
 export function DemoStrip() {
   return (
-    <section className="relative py-28 px-6 bg-obsidian-900 border-t border-white/5">
-      <div className="max-w-4xl mx-auto">
+    <section className="relative py-28 px-6 overflow-hidden border-t border-white/5">
+      <BgVideo
+        src="/video/moonlit-blade.mp4"
+        intensity={0.65}
+        vignette={0.40}
+        speed={0.5}
+        tint="linear-gradient(135deg, rgba(125,249,255,0.25) 0%, transparent 50%, rgba(139,107,255,0.20) 100%)"
+      />
+      <div className="relative max-w-4xl mx-auto z-10">
         <div className="text-center mb-12">
           <span className="text-[10px] uppercase tracking-[0.5em] text-silver-muted">A real exchange</span>
-          <h2 className="font-display text-3xl md:text-5xl mt-3 text-silver leading-tight">
+          <h2
+            className="font-display text-3xl md:text-5xl mt-3 text-silver leading-tight"
+            style={{ textShadow: "0 4px 30px rgba(0,0,0,0.7)" }}
+          >
             What 30 seconds of <span className="shimmer-text">sparring</span> sounds like.
           </h2>
         </div>

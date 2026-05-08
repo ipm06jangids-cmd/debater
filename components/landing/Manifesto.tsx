@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { BgVideo } from "./BgVideo";
 
 const LINES = [
   "Hot takes die in voice memos.",
@@ -13,47 +13,23 @@ const LINES = [
 
 export function Manifesto() {
   const ref = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const opacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 1, 1, 0]);
   const blurPx = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [12, 0, 0, 8]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.45, 0.45, 0]);
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v || reduced) return;
-    v.playbackRate = 0.45;
-    v.play().catch(() => {});
-  }, [reduced]);
 
   return (
-    <section ref={ref} className="relative py-40 px-6 bg-obsidian-950 overflow-hidden">
-      {!reduced && (
-        <motion.video
-          ref={videoRef}
-          src="/video/goku.mp4"
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          style={{ opacity: videoOpacity, scale: videoScale }}
-          className="absolute inset-0 w-full h-full object-cover brightness-[0.4] contrast-[1.2] saturate-[1.1]"
-        />
-      )}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0.55), rgba(10,10,10,0.9) 75%), linear-gradient(135deg, rgba(212,175,55,0.10), transparent 50%, rgba(125,249,255,0.10))",
-        }}
+    <section ref={ref} className="relative py-44 px-6 bg-obsidian-950 overflow-hidden">
+      <BgVideo
+        src="/video/goku.mp4"
+        intensity={0.78}
+        vignette={0.30}
+        speed={0.5}
+        tint="linear-gradient(135deg, rgba(212,175,55,0.30) 0%, transparent 50%, rgba(255,138,101,0.25) 100%)"
       />
       <motion.div
         style={{ opacity, filter }}
-        className="relative max-w-5xl mx-auto text-center flex flex-col gap-3"
+        className="relative max-w-5xl mx-auto text-center flex flex-col gap-3 z-10"
       >
         {LINES.map((l, i) => (
           <motion.span
@@ -65,7 +41,7 @@ export function Manifesto() {
             className={`font-display text-3xl md:text-6xl leading-[1.1] ${
               i === LINES.length - 1 ? "shimmer-text" : "text-silver/95"
             }`}
-            style={i !== LINES.length - 1 ? { textShadow: "0 4px 30px rgba(0,0,0,0.7)" } : undefined}
+            style={i !== LINES.length - 1 ? { textShadow: "0 4px 30px rgba(0,0,0,0.85)" } : undefined}
           >
             {l}
           </motion.span>

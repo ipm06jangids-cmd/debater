@@ -51,7 +51,7 @@ function VideoLayer({
   const opacity = useTransform(
     progress,
     [Math.max(0, (index - 0.4) / 3), index / 3, (index + 0.6) / 3, (index + 1) / 3],
-    [0, 0.6, 0.55, 0],
+    [0, 0.85, 0.80, 0],
   );
   const scale = useTransform(progress, [index / 3, (index + 1) / 3], [1.05, 1.15]);
 
@@ -69,9 +69,9 @@ function VideoLayer({
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="none"
       style={{ opacity, scale }}
-      className="absolute inset-0 w-full h-full object-cover brightness-[0.45] contrast-[1.15] saturate-[1.1]"
+      className="absolute inset-0 w-full h-full object-cover brightness-[0.85] contrast-[1.10] saturate-[1.05]"
     />
   );
 }
@@ -104,8 +104,18 @@ function Panel({
             {panel.n}
           </div>
           <div className="flex flex-col gap-5">
-            <h3 className="font-display text-3xl md:text-5xl leading-tight text-silver">{panel.title}</h3>
-            <p className="text-silver-muted text-base md:text-lg leading-relaxed max-w-xl">{panel.body}</p>
+            <h3
+              className="font-display text-3xl md:text-5xl leading-tight text-silver"
+              style={{ textShadow: "0 4px 30px rgba(0,0,0,0.85)" }}
+            >
+              {panel.title}
+            </h3>
+            <p
+              className="text-silver-muted text-base md:text-lg leading-relaxed max-w-xl"
+              style={{ textShadow: "0 2px 14px rgba(0,0,0,0.85)" }}
+            >
+              {panel.body}
+            </p>
             {/* Mock UI cue */}
             <div className="glass rounded-xl px-5 py-4 mt-2 max-w-sm flex items-center gap-3">
               <span
@@ -163,21 +173,29 @@ export function ScrollStory() {
             <VideoLayer key={p.n} src={p.video} progress={scrollYProgress} index={i} />
           ))}
         </div>
-        {/* Heavy color grade + readability vignette */}
+        {/* Edge vignette only — keep video center clearly visible */}
         <div
           aria-hidden
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0.4), rgba(10,10,10,0.85) 75%), linear-gradient(180deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.85) 100%)",
+              "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0) 25%, rgba(10,10,10,0.55) 75%, rgba(10,10,10,0.85) 100%)",
           }}
         />
         <div
           aria-hidden
-          className="absolute inset-0 mix-blend-color opacity-50"
+          className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, rgba(125,249,255,0.18) 0%, transparent 40%, rgba(212,175,55,0.16) 100%)",
+              "linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.05) 25%, rgba(10,10,10,0.05) 70%, rgba(10,10,10,0.7) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 mix-blend-color opacity-25"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(125,249,255,0.30) 0%, transparent 40%, rgba(212,175,55,0.30) 100%)",
           }}
         />
         {/* God-ray streaks */}

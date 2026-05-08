@@ -5,27 +5,26 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const CLIPS = [
-  { src: "/video/gojo-lightning.mp4", duration: 7000 },
-  { src: "/video/gear5.mp4", duration: 6500 },
-  { src: "/video/itachi.mp4", duration: 7000 },
-  { src: "/video/2b.mp4", duration: 6500 },
+  "/video/gojo-lightning.mp4",
+  "/video/gear5.mp4",
+  "/video/itachi.mp4",
+  "/video/2b.mp4",
 ];
+const CLIP_DURATION = 8500;
 
 export function HeroVideo() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yVid = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.4, 0]);
+  const yVid = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.5, 0]);
 
   useEffect(() => {
     if (reduced) return;
-    const tick = setInterval(() => {
-      setActive((a) => (a + 1) % CLIPS.length);
-    }, CLIPS[active].duration);
+    const tick = setInterval(() => setActive((a) => (a + 1) % CLIPS.length), CLIP_DURATION);
     return () => clearInterval(tick);
-  }, [active, reduced]);
+  }, [reduced]);
 
   return (
     <div ref={ref} className="absolute inset-0 -z-10 overflow-hidden bg-obsidian-950">
@@ -34,49 +33,62 @@ export function HeroVideo() {
           <AnimatePresence mode="sync">
             <motion.video
               key={active}
-              initial={{ opacity: 0, scale: 1.06 }}
+              initial={{ opacity: 0, scale: 1.04 }}
               animate={{ opacity: 1, scale: 1.0 }}
-              exit={{ opacity: 0, scale: 1.04 }}
-              transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, scale: 1.06 }}
+              transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
               autoPlay
               muted
               playsInline
               loop
-              src={CLIPS[active].src}
-              className="absolute inset-0 w-full h-full object-cover brightness-[0.55] contrast-[1.18] saturate-[1.10]"
+              src={CLIPS[active]}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: "brightness(0.92) contrast(1.10) saturate(1.10)" }}
               preload="auto"
+              onLoadedMetadata={(e) => {
+                (e.target as HTMLVideoElement).playbackRate = 0.65;
+              }}
             />
           </AnimatePresence>
         </motion.div>
       )}
-      {/* Color grade overlay — push toward obsidian/cyan/gold */}
+      {/* Cinematic color tint — subtle */}
       <div
         aria-hidden
-        className="absolute inset-0 mix-blend-color opacity-40"
+        className="absolute inset-0 mix-blend-color opacity-20"
         style={{
           background:
-            "linear-gradient(135deg, rgba(125,249,255,0.30) 0%, rgba(10,10,10,0.0) 30%, rgba(212,175,55,0.20) 70%, rgba(139,107,255,0.30) 100%)",
+            "linear-gradient(135deg, rgba(125,249,255,0.40) 0%, transparent 35%, rgba(212,175,55,0.30) 65%, rgba(139,107,255,0.40) 100%)",
         }}
       />
-      {/* Vignette + readability */}
+      {/* Edge vignette only — keep center bright */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 40%, rgba(10,10,10,0.20), rgba(10,10,10,0.85) 75%), linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.65) 50%, #0A0A0A 100%)",
+            "radial-gradient(ellipse at 50% 45%, rgba(10,10,10,0) 35%, rgba(10,10,10,0.60) 80%, rgba(10,10,10,0.85) 100%)",
         }}
       />
-      {/* God-ray sweeps */}
+      {/* Top + bottom fade only */}
       <div
         aria-hidden
-        className="absolute inset-0 mix-blend-screen opacity-30 pointer-events-none"
+        className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(105deg, transparent 30%, rgba(212,175,55,0.18) 45%, transparent 60%), linear-gradient(85deg, transparent 60%, rgba(125,249,255,0.16) 75%, transparent 90%)",
+            "linear-gradient(180deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.05) 25%, rgba(10,10,10,0.05) 70%, rgba(10,10,10,0.85) 100%)",
         }}
       />
-      <div className="absolute bottom-0 left-0 right-0 h-48 divider-fade" />
+      {/* God-ray streaks */}
+      <div
+        aria-hidden
+        className="absolute inset-0 mix-blend-screen opacity-25 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(105deg, transparent 30%, rgba(212,175,55,0.20) 45%, transparent 60%), linear-gradient(85deg, transparent 60%, rgba(125,249,255,0.18) 75%, transparent 90%)",
+        }}
+      />
+      <div className="absolute bottom-0 left-0 right-0 h-32 divider-fade" />
     </div>
   );
 }

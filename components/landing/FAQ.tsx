@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BgVideo } from "./BgVideo";
 
 const ITEMS = [
   {
@@ -37,11 +38,21 @@ const ITEMS = [
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="relative py-32 px-6 bg-obsidian-900 border-t border-white/5">
-      <div className="max-w-3xl mx-auto">
+    <section className="relative py-32 px-6 border-t border-white/5 overflow-hidden">
+      <BgVideo
+        src="/video/gojo-vs-sukuna.mp4"
+        intensity={0.50}
+        vignette={0.55}
+        speed={0.45}
+        tint="linear-gradient(135deg, rgba(255,138,101,0.25) 0%, transparent 50%, rgba(139,107,255,0.25) 100%)"
+      />
+      <div className="relative max-w-3xl mx-auto z-10">
         <div className="text-center mb-14">
           <span className="text-[10px] uppercase tracking-[0.5em] text-silver-muted">Common questions</span>
-          <h2 className="font-display text-4xl md:text-6xl mt-3 leading-tight text-silver">
+          <h2
+            className="font-display text-4xl md:text-6xl mt-3 leading-tight text-silver"
+            style={{ textShadow: "0 4px 30px rgba(0,0,0,0.7)" }}
+          >
             Before you step in.
           </h2>
         </div>
@@ -55,11 +66,11 @@ export function FAQ() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.04 }}
-                className="glass rounded-xl overflow-hidden"
+                className="glass-strong rounded-xl overflow-hidden"
               >
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between text-left px-6 py-5 hover:bg-white/[0.02] transition"
+                  className="w-full flex items-center justify-between text-left px-6 py-5 hover:bg-white/[0.04] transition"
                   aria-expanded={isOpen}
                 >
                   <span className="font-display text-lg md:text-xl text-silver pr-4">{it.q}</span>

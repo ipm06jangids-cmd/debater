@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useStreak } from "@/hooks/useStreak";
 import { getDailyPrompt } from "@/lib/prompts/daily-prompts";
+import { BgVideo } from "./BgVideo";
 
 export function DailyPromptTeaser() {
   const streak = useStreak();
@@ -11,32 +12,18 @@ export function DailyPromptTeaser() {
   const today = new Date().toLocaleDateString(undefined, { month: "long", day: "numeric" });
 
   return (
-    <section id="today" className="relative py-32 px-6 bg-obsidian-950 overflow-hidden">
-      <video
+    <section id="today" className="relative py-32 px-6 overflow-hidden">
+      <BgVideo
         src="/video/hoshino.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        className="absolute inset-0 w-full h-full object-cover brightness-[0.30] contrast-[1.15] saturate-[1.05] opacity-40"
+        intensity={0.70}
+        vignette={0.40}
+        speed={0.50}
+        tint="linear-gradient(135deg, rgba(212,175,55,0.30) 0%, transparent 50%, rgba(125,249,255,0.20) 100%)"
       />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0.55), rgba(10,10,10,0.9) 70%), radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.18), transparent 60%)",
-        }}
-      />
-      <div className="relative max-w-4xl mx-auto text-center">
+      <div className="relative max-w-4xl mx-auto text-center z-10">
         <span className="text-[10px] uppercase tracking-[0.5em] text-silver-muted">
           Today · {today}
-          {streak > 0 && (
-            <span className="ml-3 text-neon-gold">
-              {streak} day streak ↗
-            </span>
-          )}
+          {streak > 0 && <span className="ml-3 text-neon-gold">{streak} day streak ↗</span>}
         </span>
         <motion.blockquote
           initial={{ opacity: 0, y: 16 }}
@@ -44,6 +31,7 @@ export function DailyPromptTeaser() {
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-3xl md:text-6xl leading-[1.05] mt-8 text-silver"
+          style={{ textShadow: "0 4px 30px rgba(0,0,0,0.85)" }}
         >
           "{prompt}"
         </motion.blockquote>
