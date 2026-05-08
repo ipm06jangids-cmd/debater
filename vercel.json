@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "next build",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "functions": {
+    "app/api/elevenlabs-llm/route.ts": { "maxDuration": 60 },
+    "app/api/score/route.ts": { "maxDuration": 30 },
+    "app/api/verdict/route.ts": { "maxDuration": 60 }
+  }
+}
