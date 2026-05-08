@@ -50,12 +50,11 @@ export function HeroVideo() {
             loop
             src={HERO_SRC}
             preload="auto"
-            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
             style={{
-              filter: "brightness(1.10) contrast(1.10) saturate(1.20)",
+              filter: "brightness(0.85) contrast(1.10) saturate(1.15)",
               objectPosition: HERO_POSITION,
-              opacity: 1,
+              opacity: 0.82,
             }}
           />
         </motion.div>
@@ -69,22 +68,22 @@ export function HeroVideo() {
             "linear-gradient(135deg, rgba(125,249,255,0.40) 0%, transparent 35%, rgba(212,175,55,0.30) 65%, rgba(139,107,255,0.40) 100%)",
         }}
       />
-      {/* MUCH lighter vignette — was killing visibility */}
+      {/* Center darkening behind text — dark navy/black for contrast */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0) 60%, rgba(10,10,10,0.20) 88%, rgba(10,10,10,0.55) 100%)",
+            "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(5,8,20,0.70) 0%, rgba(5,8,20,0.45) 40%, rgba(10,10,10,0.20) 70%, rgba(10,10,10,0.55) 100%)",
         }}
       />
-      {/* Top + bottom — very light */}
+      {/* Top + bottom band */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0) 12%, rgba(10,10,10,0) 85%, rgba(10,10,10,0.65) 100%)",
+            "linear-gradient(180deg, rgba(5,8,20,0.65) 0%, rgba(5,8,20,0.10) 18%, rgba(5,8,20,0.10) 80%, rgba(10,10,10,0.75) 100%)",
         }}
       />
       {/* God-rays */}
