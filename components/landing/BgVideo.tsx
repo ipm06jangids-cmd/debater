@@ -16,6 +16,8 @@ interface Props {
   speed?: number;
   /** className passthrough on outer div */
   className?: string;
+  /** object-position for the video element */
+  position?: string;
 }
 
 export function BgVideo({
@@ -25,6 +27,7 @@ export function BgVideo({
   tint,
   speed = 0.55,
   className = "",
+  position = "center",
 }: Props) {
   const reduced = useReducedMotion();
   const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.05, rootMargin: "200px" });
@@ -54,7 +57,8 @@ export function BgVideo({
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: intensity,
-            filter: `brightness(0.92) contrast(1.10) saturate(1.08)`,
+            filter: `brightness(1.0) contrast(1.10) saturate(1.10)`,
+            objectPosition: position,
           }}
         />
       )}

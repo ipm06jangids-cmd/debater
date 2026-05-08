@@ -15,9 +15,10 @@ export function StatsRibbon() {
     <section className="relative py-20 px-6 border-y border-white/5 overflow-hidden">
       <BgVideo
         src="/video/kakashi.mp4"
-        intensity={0.45}
-        vignette={0.55}
+        intensity={0.55}
+        vignette={0.45}
         speed={0.45}
+        position="center 35%"
         tint="linear-gradient(90deg, rgba(125,249,255,0.20) 0%, transparent 50%, rgba(212,175,55,0.20) 100%)"
       />
       <div className="relative max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 z-10">
