@@ -30,7 +30,7 @@ export function HeroVideo() {
   }, [reduced]);
 
   return (
-    <div ref={ref} className="absolute inset-0 -z-10 overflow-hidden">
+    <div ref={ref} className="absolute inset-0 z-0 overflow-hidden">
       {/* Vivid CSS aura — ALWAYS visible (anime vibe even before video loads) */}
       <div
         aria-hidden
