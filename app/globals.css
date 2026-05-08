@@ -20,7 +20,7 @@ html, body {
   background: rgb(var(--bg));
   color: rgb(var(--silver));
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {

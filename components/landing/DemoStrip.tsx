@@ -14,10 +14,11 @@ export function DemoStrip() {
   return (
     <section className="relative py-28 px-6 overflow-hidden border-t border-white/5">
       <BgVideo
-        src="/video/moonlit-blade.mp4"
+        src="/video/gojo-lightning.mp4"
         intensity={0.65}
         vignette={0.40}
         speed={0.5}
+        position="center 30%"
         tint="linear-gradient(135deg, rgba(125,249,255,0.25) 0%, transparent 50%, rgba(139,107,255,0.20) 100%)"
       />
       <div className="relative max-w-4xl mx-auto z-10">

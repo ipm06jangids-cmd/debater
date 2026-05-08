@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fraunces.variable} ${geist.variable} ${geistMono.variable} dark`}>
       <head>
-        <link rel="preload" as="video" href="/video/gear5.mp4" type="video/mp4" />
+        <link rel="preload" as="video" href="/video/moonlit-blade.mp4" type="video/mp4" />
       </head>
       <body className="bg-obsidian-900 text-silver grain antialiased">
         <CursorGlow />

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue, useMotionTemplate } from "framer-motion";
+import { motion } from "framer-motion";
+import { useInView } from "@/hooks/useInView";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const PANELS = [
   {
@@ -9,110 +11,130 @@ const PANELS = [
     title: "State your position",
     body: "Speak it like you mean it. One claim, sharply defined. The AI reads it, locks the opposite stance, and prepares the strongest possible challenge.",
     accent: "rgb(125,249,255)",
+    accentHex: "#7DF9FF",
     video: "/video/gojo-blue.mp4",
     position: "center 30%",
     cue: "Listening · 0:00",
+    meter: 23,
   },
   {
     n: "02",
     title: "AI argues the steelman",
     body: "Not strawmen. Not platitudes. The AI takes the hardest version of the counter-argument — concrete, specific, voiced calmly across the podium.",
     accent: "rgb(212,175,55)",
+    accentHex: "#D4AF37",
     video: "/video/itachi.mp4",
-    position: "center 35%",
+    position: "center 40%",
     cue: "Counter · 25 words",
+    meter: 64,
   },
   {
     n: "03",
     title: "Live judgment as you speak",
     body: "Every rebuttal scored on logic, evidence, and rhetoric. Numbers move while you talk. After five rounds — a verdict, with the line you nailed and the one you fumbled.",
     accent: "rgb(139,107,255)",
+    accentHex: "#8B6BFF",
     video: "/video/gojo-lightning.mp4",
     position: "center 30%",
     cue: "Logic 78 · Evidence 64 · Rhetoric 81",
+    meter: 81,
   },
 ];
 
-function Dot({ progress, index, accent }: { progress: MotionValue<number>; index: number; accent: string }) {
-  const op = useTransform(progress, [(index - 0.4) / 3, index / 3, (index + 0.6) / 3], [0.2, 1, 0.2]);
-  return <motion.span style={{ opacity: op, backgroundColor: accent }} className="w-8 h-1 rounded-full" />;
-}
-
-function VideoLayer({
-  src,
-  position,
-  progress,
-  index,
-}: {
-  src: string;
-  position: string;
-  progress: MotionValue<number>;
-  index: number;
-}) {
-  const ref = useRef<HTMLVideoElement>(null);
-  // wider visibility window so each panel video shows clearly
-  const opacity = useTransform(
-    progress,
-    [
-      Math.max(0, (index - 0.5) / 3),
-      index / 3,
-      (index + 0.7) / 3,
-      Math.min(1, (index + 1.2) / 3),
-    ],
-    [0, 0.85, 0.80, 0],
-  );
-  const scale = useTransform(progress, [index / 3, (index + 1) / 3], [1.04, 1.12]);
-
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    v.playbackRate = 0.55;
-    v.play().catch(() => {});
-  }, []);
-
-  return (
-    <motion.video
-      ref={ref}
-      src={src}
-      muted
-      loop
-      playsInline
-      autoPlay
-      preload={index === 0 ? "auto" : "metadata"}
-      style={{ opacity, scale, objectPosition: position, filter: "brightness(1.05) contrast(1.10) saturate(1.10)" }}
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-  );
-}
-
-function Panel({
+function PanelSection({
   panel,
-  progress,
   index,
 }: {
   panel: (typeof PANELS)[number];
-  progress: MotionValue<number>;
   index: number;
 }) {
-  const localProgress = useTransform(progress, [index / 3, (index + 1) / 3], [0, 1]);
-  const opacity = useTransform(localProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
-  const y = useTransform(localProgress, [0, 1], [40, -40]);
-  const scale = useTransform(localProgress, [0, 0.5, 1], [0.96, 1, 0.97]);
-  const meterFill = useTransform(localProgress, [0.1, 0.85], [0, 100]);
-  const meterPct = useMotionTemplate`${meterFill}%`;
-  const meterRound = useTransform(meterFill, (v) => Math.round(v));
+  const reduced = useReducedMotion();
+  const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.15, rootMargin: "100px" });
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || reduced) return;
+    v.playbackRate = 0.55;
+    if (inView) v.play().catch(() => {});
+    else v.pause();
+  }, [inView, reduced]);
 
   return (
-    <motion.div style={{ opacity, y, scale }} className="absolute inset-0 flex items-center justify-center px-6">
-      <div className="max-w-6xl w-full grid md:grid-cols-[1fr_auto] gap-12 items-center">
+    <div
+      ref={ref}
+      className="relative min-h-svh flex items-center justify-center px-6 overflow-hidden"
+    >
+      {/* Persistent CSS aura */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${panel.accentHex}33, transparent 60%), linear-gradient(135deg, #0a0a14 0%, #14101f 50%, #0a1418 100%)`,
+        }}
+      />
+      {/* Video bg */}
+      {!reduced && (
+        <video
+          ref={videoRef}
+          src={panel.video}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload={index === 0 ? "auto" : "metadata"}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            opacity: 0.85,
+            objectPosition: panel.position,
+            filter: "brightness(1.05) contrast(1.10) saturate(1.10)",
+          }}
+        />
+      )}
+      {/* Edge vignette */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0) 35%, rgba(10,10,10,0.50) 80%, rgba(10,10,10,0.85) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 15%, rgba(10,10,10,0) 85%, rgba(10,10,10,0.85) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 mix-blend-color opacity-20 pointer-events-none"
+        style={{
+          background: `linear-gradient(135deg, ${panel.accentHex}30 0%, transparent 50%, ${panel.accentHex}20 100%)`,
+        }}
+      />
+
+      <div className="relative max-w-6xl w-full grid md:grid-cols-[1fr_auto] gap-12 items-center z-10 py-20">
         <div className="grid md:grid-cols-[140px_1fr] gap-8 items-start">
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-7xl md:text-9xl leading-none"
             style={{ color: panel.accent, textShadow: `0 0 50px ${panel.accent}, 0 0 100px ${panel.accent}40` }}
           >
             {panel.n}
-          </div>
-          <div className="flex flex-col gap-5">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.9, delay: 0.15 }}
+            className="flex flex-col gap-5"
+          >
             <h3
               className="font-display text-3xl md:text-5xl leading-tight text-silver"
               style={{ textShadow: "0 4px 30px rgba(0,0,0,0.85)" }}
@@ -132,20 +154,31 @@ function Panel({
               />
               <span className="text-[11px] uppercase tracking-[0.2em] text-silver-muted">{panel.cue}</span>
             </div>
-          </div>
+          </motion.div>
         </div>
-        <div className="hidden md:flex flex-col gap-6 w-72">
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, delay: 0.3 }}
+          className="hidden md:flex flex-col gap-6 w-72"
+        >
           <div className="glass-strong rounded-2xl p-5">
             <span className="text-[9px] uppercase tracking-[0.3em] text-silver-muted block mb-3">Strength</span>
             <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
               <motion.div
-                style={{ width: meterPct, backgroundColor: panel.accent, boxShadow: `0 0 14px ${panel.accent}` }}
+                initial={{ width: 0 }}
+                whileInView={{ width: `${panel.meter}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{ backgroundColor: panel.accent, boxShadow: `0 0 14px ${panel.accent}` }}
                 className="h-full rounded-full"
               />
             </div>
-            <motion.span style={{ color: panel.accent }} className="font-display text-4xl mt-3 block">
-              <motion.span>{meterRound}</motion.span>
-            </motion.span>
+            <span className="font-display text-4xl mt-3 block" style={{ color: panel.accent }}>
+              {panel.meter}
+            </span>
           </div>
           <div className="flex flex-col gap-2">
             {[0.4, 0.7, 0.55, 0.85, 0.6, 0.92, 0.7].map((h, i) => (
@@ -153,82 +186,28 @@ function Panel({
                 key={i}
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: h }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.5 + i * 0.05, ease: "easeOut" }}
                 style={{ originX: 0, backgroundColor: panel.accent, opacity: 0.55 }}
                 className="h-1.5 rounded-full"
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export function ScrollStory() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-
   return (
-    <section ref={ref} id="how" className="relative h-[180vh] bg-obsidian-950">
-      {/* Bg videos cover entire section, NOT just sticky inner */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Persistent CSS aura backdrop — always visible behind videos */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(125,249,255,0.22), transparent 60%), radial-gradient(ellipse 60% 50% at 20% 70%, rgba(212,175,55,0.20), transparent 60%), radial-gradient(ellipse 70% 60% at 80% 30%, rgba(139,107,255,0.22), transparent 60%), linear-gradient(135deg, #0a0a14 0%, #1a0a1f 50%, #0a1418 100%)",
-          }}
-        />
-        {PANELS.map((p, i) => (
-          <VideoLayer key={p.n} src={p.video} position={p.position} progress={scrollYProgress} index={i} />
-        ))}
-        {/* Edge vignette */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0) 30%, rgba(10,10,10,0.45) 75%, rgba(10,10,10,0.80) 100%)",
-          }}
-        />
-        {/* Top + bottom fade for section transitions */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.0) 12%, rgba(10,10,10,0.0) 88%, rgba(10,10,10,0.85) 100%)",
-          }}
-        />
-        {/* Color tint */}
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-color opacity-20 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(125,249,255,0.30) 0%, transparent 40%, rgba(212,175,55,0.30) 100%)",
-          }}
-        />
+    <section id="how" className="relative bg-obsidian-950">
+      <div className="text-center pt-20 pb-4">
+        <span className="text-[10px] uppercase tracking-[0.5em] text-silver-muted">The Loop</span>
       </div>
-
-      {/* Sticky pinned content */}
-      <div className="sticky top-0 h-svh flex items-center justify-center overflow-hidden z-10">
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-silver-muted z-10">
-          The Loop
-        </div>
-        {PANELS.map((p, i) => (
-          <Panel key={p.n} panel={p} progress={scrollYProgress} index={i} />
-        ))}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-          {PANELS.map((p, i) => (
-            <Dot key={p.n} progress={scrollYProgress} index={i} accent={p.accent} />
-          ))}
-        </div>
-      </div>
+      {PANELS.map((p, i) => (
+        <PanelSection key={p.n} panel={p} index={i} />
+      ))}
     </section>
   );
 }
