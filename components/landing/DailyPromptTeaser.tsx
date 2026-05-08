@@ -12,12 +12,21 @@ export function DailyPromptTeaser() {
 
   return (
     <section id="today" className="relative py-32 px-6 bg-obsidian-950 overflow-hidden">
+      <video
+        src="/video/hoshino.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover brightness-[0.30] contrast-[1.15] saturate-[1.05] opacity-40"
+      />
       <div
         aria-hidden
         className="absolute inset-0 -z-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.10), transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(125,249,255,0.08), transparent 50%)",
+            "radial-gradient(ellipse at 50% 50%, rgba(10,10,10,0.55), rgba(10,10,10,0.9) 70%), radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.18), transparent 60%)",
         }}
       />
       <div className="relative max-w-4xl mx-auto text-center">
