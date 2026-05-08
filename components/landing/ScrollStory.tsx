@@ -77,8 +77,9 @@ function VideoLayer({
       muted
       loop
       playsInline
-      preload="metadata"
-      style={{ opacity, scale, objectPosition: position }}
+      autoPlay
+      preload={index === 0 ? "auto" : "metadata"}
+      style={{ opacity, scale, objectPosition: position, filter: "brightness(1.05) contrast(1.10) saturate(1.10)" }}
       className="absolute inset-0 w-full h-full object-cover"
     />
   );
@@ -170,9 +171,18 @@ export function ScrollStory() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   return (
-    <section ref={ref} id="how" className="relative h-[220vh] bg-obsidian-950">
+    <section ref={ref} id="how" className="relative h-[180vh] bg-obsidian-950">
       {/* Bg videos cover entire section, NOT just sticky inner */}
       <div className="absolute inset-0 overflow-hidden">
+        {/* Persistent CSS aura backdrop — always visible behind videos */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(125,249,255,0.22), transparent 60%), radial-gradient(ellipse 60% 50% at 20% 70%, rgba(212,175,55,0.20), transparent 60%), radial-gradient(ellipse 70% 60% at 80% 30%, rgba(139,107,255,0.22), transparent 60%), linear-gradient(135deg, #0a0a14 0%, #1a0a1f 50%, #0a1418 100%)",
+          }}
+        />
         {PANELS.map((p, i) => (
           <VideoLayer key={p.n} src={p.video} position={p.position} progress={scrollYProgress} index={i} />
         ))}

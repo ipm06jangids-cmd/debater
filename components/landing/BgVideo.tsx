@@ -46,6 +46,15 @@ export function BgVideo({
 
   return (
     <div ref={ref} className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+      {/* Persistent CSS aura behind video — visible BEFORE video loads so section is never empty black */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 40%, rgba(125,249,255,0.18), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 60%, rgba(212,175,55,0.18), transparent 60%), linear-gradient(135deg, #0a0a14 0%, #1a0a1f 50%, #0a1418 100%)",
+        }}
+      />
       {!reduced && (
         <video
           ref={videoRef}
@@ -53,11 +62,12 @@ export function BgVideo({
           muted
           loop
           playsInline
-          preload="none"
+          autoPlay
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: intensity,
-            filter: `brightness(1.0) contrast(1.10) saturate(1.10)`,
+            filter: `brightness(1.05) contrast(1.10) saturate(1.10)`,
             objectPosition: position,
           }}
         />
