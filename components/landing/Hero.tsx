@@ -3,15 +3,13 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { HeroVideo } from "./HeroVideo";
-import { FloatingShards } from "./FloatingShards";
 
 export function Hero() {
   return (
     <section className="relative min-h-svh flex flex-col items-center justify-center px-6 overflow-hidden">
       <HeroVideo />
-      <FloatingShards />
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl gap-8">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl gap-8 pt-20">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -26,6 +24,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-5xl md:text-8xl leading-[0.95] tracking-tight"
+          style={{ textShadow: "0 4px 40px rgba(0,0,0,0.7)" }}
         >
           <span className="shimmer-text">Argue out loud.</span>
           <br />
@@ -37,6 +36,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.25 }}
           className="text-base md:text-xl text-silver-muted max-w-2xl leading-relaxed"
+          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.6)" }}
         >
           State a position. AI argues the strongest possible counter — voice to voice. Five rounds. A live meter scores your logic, evidence, and rhetoric in real time. Walk away with a verdict, not a vibe.
         </motion.p>
@@ -60,17 +60,17 @@ export function Hero() {
             See how it works ↓
           </a>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.0, duration: 1.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="text-[9px] uppercase tracking-[0.4em] text-silver-dim">Scroll</span>
-          <span className="block w-[1px] h-10 bg-gradient-to-b from-silver-muted to-transparent" />
-        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.0, duration: 1.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+      >
+        <span className="text-[9px] uppercase tracking-[0.4em] text-silver-dim">Scroll</span>
+        <span className="block w-[1px] h-10 bg-gradient-to-b from-silver-muted to-transparent" />
+      </motion.div>
     </section>
   );
 }

@@ -79,10 +79,10 @@ export function ScrollStory() {
       ref={ref}
       id="how"
       style={{ backgroundColor: bg }}
-      className="relative h-[300vh]"
+      className="relative h-[220vh]"
     >
       <div className="sticky top-0 h-svh flex items-center justify-center overflow-hidden">
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-silver-muted">
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-silver-muted">
           The Loop
         </div>
         {PANELS.map((p, i) => (
