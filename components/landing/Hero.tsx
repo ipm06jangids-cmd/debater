@@ -14,7 +14,8 @@ export function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[10px] md:text-xs uppercase tracking-[0.5em] text-silver-muted glass px-4 py-2 rounded-full"
+          className="text-[10px] md:text-xs uppercase tracking-[0.5em] glass px-4 py-2 rounded-full"
+          style={{ color: "#0a1228", textShadow: "0 1px 2px rgba(255,255,255,0.5)" }}
         >
           Voice-first · 5 rounds · Live judgment
         </motion.div>
@@ -24,19 +25,26 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-5xl md:text-8xl leading-[0.95] tracking-tight"
-          style={{ textShadow: "0 4px 40px rgba(0,0,0,0.7)" }}
+          style={{
+            color: "#050818",
+            textShadow:
+              "0 0 24px rgba(255,255,255,0.85), 0 0 60px rgba(255,255,255,0.55), 0 2px 4px rgba(255,255,255,0.6)",
+          }}
         >
-          <span className="shimmer-text">Argue out loud.</span>
+          <span style={{ color: "#0a1228" }}>Argue out loud.</span>
           <br />
-          <span className="text-silver/95">Get smarter on contact.</span>
+          <span style={{ color: "#0a1228" }}>Get smarter on contact.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.25 }}
-          className="text-base md:text-xl text-silver-muted max-w-2xl leading-relaxed"
-          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.6)" }}
+          className="text-base md:text-xl max-w-2xl leading-relaxed font-medium"
+          style={{
+            color: "#0a1228",
+            textShadow: "0 0 16px rgba(255,255,255,0.85), 0 1px 2px rgba(255,255,255,0.7)",
+          }}
         >
           State a position. AI argues the strongest possible counter — voice to voice. Five rounds. A live meter scores your logic, evidence, and rhetoric in real time. Walk away with a verdict, not a vibe.
         </motion.p>
@@ -55,7 +63,11 @@ export function Hero() {
           </Link>
           <a
             href="#how"
-            className="text-xs uppercase tracking-[0.3em] text-silver-muted hover:text-silver transition"
+            className="text-xs uppercase tracking-[0.3em] hover:opacity-80 transition"
+            style={{
+              color: "#0a1228",
+              textShadow: "0 0 12px rgba(255,255,255,0.7)",
+            }}
           >
             See how it works ↓
           </a>
@@ -68,8 +80,13 @@ export function Hero() {
         transition={{ delay: 1.0, duration: 1.6 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
       >
-        <span className="text-[9px] uppercase tracking-[0.4em] text-silver-dim">Scroll</span>
-        <span className="block w-[1px] h-10 bg-gradient-to-b from-silver-muted to-transparent" />
+        <span
+          className="text-[9px] uppercase tracking-[0.4em]"
+          style={{ color: "#0a1228", textShadow: "0 0 10px rgba(255,255,255,0.7)" }}
+        >
+          Scroll
+        </span>
+        <span className="block w-[1px] h-10 bg-gradient-to-b from-[#0a1228] to-transparent" />
       </motion.div>
     </section>
   );
