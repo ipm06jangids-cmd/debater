@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 10 10 10;
+  --surface: 20 20 20;
+  --neon-cyan: 125 249 255;
+  --neon-gold: 212 175 55;
+  --neon-violet: 139 107 255;
+  --silver: 232 232 232;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  background: rgb(var(--bg));
+  color: rgb(var(--silver));
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-geist), system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(125, 249, 255, 0.30);
+  color: white;
+}
+
+.font-display {
+  font-family: var(--font-fraunces), "Cormorant Garamond", serif;
+  font-feature-settings: "ss01", "ss02";
+  letter-spacing: -0.02em;
+}
+
+/* Film grain overlay */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("/grain.svg");
+  background-size: 280px 280px;
+}
+
+/* Mouse glow halo */
+.glow-cursor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(125, 249, 255, 0.10),
+    transparent 40%
+  );
+  transition: background 120ms ease-out;
+}
+
+/* Glass panel */
+.glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.glass-strong {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Neon CTA button */
+.btn-neon {
+  position: relative;
+  background: linear-gradient(135deg, rgba(125,249,255,0.16), rgba(139,107,255,0.10));
+  border: 1px solid rgba(125,249,255,0.4);
+  color: rgb(var(--silver));
+  text-shadow: 0 0 12px rgba(125,249,255,0.5);
+  box-shadow: 0 0 24px rgba(125,249,255,0.18), inset 0 0 18px rgba(125,249,255,0.12);
+  transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-neon:hover {
+  box-shadow: 0 0 36px rgba(125,249,255,0.45), inset 0 0 28px rgba(125,249,255,0.25);
+  transform: translateY(-1px);
+  border-color: rgba(125,249,255,0.7);
+}
+.btn-neon:active {
+  transform: translateY(0);
+}
+
+/* Gold variant */
+.btn-gold {
+  background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.06));
+  border: 1px solid rgba(212,175,55,0.45);
+  color: rgb(var(--silver));
+  text-shadow: 0 0 12px rgba(212,175,55,0.5);
+  box-shadow: 0 0 24px rgba(212,175,55,0.20);
+  transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-gold:hover {
+  box-shadow: 0 0 38px rgba(212,175,55,0.45);
+  transform: translateY(-1px);
+}
+
+/* Shimmering gradient text */
+.shimmer-text {
+  background: linear-gradient(110deg, #e8e8e8 0%, #ffffff 30%, #d4af37 50%, #ffffff 70%, #e8e8e8 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 8s linear infinite;
+}
+
+/* Section divider gradient */
+.divider-fade {
+  background: linear-gradient(to bottom, transparent, rgb(var(--bg)));
+}
+
+/* HUD radial */
+.radial-meter {
+  --p: 0;
+  background:
+    conic-gradient(
+      rgb(var(--neon-cyan)) calc(var(--p) * 1%),
+      rgba(255,255,255,0.06) 0
+    );
+  -webkit-mask: radial-gradient(circle, transparent 56%, black 58%);
+  mask: radial-gradient(circle, transparent 56%, black 58%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
